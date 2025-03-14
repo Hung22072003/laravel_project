@@ -36,7 +36,7 @@ class SocialAccountRepositoryImplementation implements SocialAccountRepositoryIn
     {
         $socialAccount = SocialAccount::where('user_id', $userId)
             ->where('platform', $platform)
-            ->first(['id', 'user_id', 'social_user_id', 'screen_name', 'platform']);
+            ->first(['id', 'user_id', 'social_user_id', 'screen_name', 'platform', 'access_token']);
         return $socialAccount;
     }
 
