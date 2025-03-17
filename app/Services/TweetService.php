@@ -12,7 +12,7 @@ class TweetService
     {
         $consumer_key = env('TWITTER_CONSUMER_KEY', '');
         $consumer_secret = env('TWITTER_CONSUMER_SECRET', '');
-        $this->client = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_secret);
+        $this->client = new TwitterOAuth($consumer_key, $consumer_secret, "1897551868815155200-CuOErxqKaxvjv0M4jW9KCOzAF0fjAy", "9DmzdKbcZFNoQaE0SZffZVkJKfSjT76oFMUJyArXy8h42");
     }
 
     public function uploadMedias(array $mediaPaths): array
@@ -20,7 +20,8 @@ class TweetService
         $mediaIds = [];
 
         foreach ($mediaPaths as $path) {
-            $uploadedMedia = $this->client->upload("media/upload", ["media" => $path]);
+            $uploadedMedia = $this->client->upload("media/upload", ["media" => $path->getRealPath()]);
+            echo $uploadedMedia;
             if (isset($uploadedMedia->media_id_string)) {
                 $mediaIds[] = $uploadedMedia->media_id_string;
             }

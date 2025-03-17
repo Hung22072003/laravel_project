@@ -2,15 +2,18 @@
 
 namespace App\Services;
 use App\Services\SocialAccountService;
+use App\Services\PostService;
 use Illuminate\Support\Facades\Http;
 use App\Traits\APIResponse;
 
 class LinkedinService {
     private $socialAccountService;
+    private $postService;
     use APIResponse;
-    public function __construct(SocialAccountService $socialAccountService)
+    public function __construct(SocialAccountService $socialAccountService, PostService $postService)
     {
         $this->socialAccountService = $socialAccountService;
+        $this->postService = $postService;
     }
     public function uploadMedias(string $userId, string $accessToken, array $images) {
         $assetIds = [];
@@ -94,6 +97,24 @@ class LinkedinService {
             ->withHeaders(['Content-Type' => 'application/json'])
             ->post("https://api.linkedin.com/v2/ugcPosts", $postPayload);
 
-        return $this->responseSuccessWithData($postResponse->json());
+        $response = $postResponse->json();
+        // var_dump($response["id"]);
+        if($response["id"]){
+            $data = [
+                'id' => $response["id"],
+                'user_id'=> $user->getAuthIdentifier(),
+                'content' => $message,
+                'media_urls' => $images,
+                'scheduled_time' => null,
+                'list_platforms'=> ["LINKEDIN"]
+            ];   
+
+            $result = $this->postService->store($data);
+
+            if($result['success']) {
+                return $this->responseSuccessWithData($response);
+            } 
+        }   
+        return $this->responseError($result["message"]);
     }
 }

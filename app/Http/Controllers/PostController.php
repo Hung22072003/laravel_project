@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
-use App\Services\postService;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use App\Traits\APIResponse;
 
@@ -14,7 +14,7 @@ class PostController extends ControllerWithGuard
 
     private $postService;
 
-    public function __construct(postService $postService)
+    public function __construct(PostService $postService)
     {
         parent::__construct();
         $this->postService = $postService;

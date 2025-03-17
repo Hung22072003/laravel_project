@@ -60,7 +60,7 @@ class PostRepositoryImplementation implements PostRepositoryInterface
 
         DB::beginTransaction();
         try {
-            $postId = Str::uuid();
+            $postId = $data["id"];
             DB::table('posts')->insert([
                 'id' => $postId,
                 'user_id' => $userId,
@@ -83,6 +83,7 @@ class PostRepositoryImplementation implements PostRepositoryInterface
                         'platform' => $platform,
                         'social_account_id' => $socialAccount->id,
                         'created_at' => now(),
+                        'status'=> $scheduledTime ? 'PENDING' : 'SUCCESS'
                     ]);
                 }
             }

@@ -19,7 +19,7 @@ class TweetController extends ControllerWithGuard
 
     public function store(TweetStoreRequest $request)
     {    
-        $result = $this->tweetService->store($request->message, $request->mediaPaths);
+        $result = $this->tweetService->store($request->message, $request->mediaPaths ? $request->mediaPaths : []);
         return response()->json($result['response'], $result['httpCode']);
     }
 
