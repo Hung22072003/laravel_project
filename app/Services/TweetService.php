@@ -12,7 +12,7 @@ class TweetService
     {
         $consumer_key = env('TWITTER_CONSUMER_KEY', '');
         $consumer_secret = env('TWITTER_CONSUMER_SECRET', '');
-        $this->client = new TwitterOAuth($consumer_key, $consumer_secret, "1897551868815155200-CuOErxqKaxvjv0M4jW9KCOzAF0fjAy", "9DmzdKbcZFNoQaE0SZffZVkJKfSjT76oFMUJyArXy8h42");
+        $this->client = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_secret);
     }
 
     public function uploadMedias(array $mediaPaths): array
@@ -21,7 +21,6 @@ class TweetService
 
         foreach ($mediaPaths as $path) {
             $uploadedMedia = $this->client->upload("media/upload", ["media" => $path->getRealPath()]);
-            echo $uploadedMedia;
             if (isset($uploadedMedia->media_id_string)) {
                 $mediaIds[] = $uploadedMedia->media_id_string;
             }
@@ -41,10 +40,13 @@ class TweetService
 
         $response = $this->client->post("tweets", $parameters);
 
+        var_dump( $response);
         return [
             'httpCode' => $this->client->getLastHttpCode(),
             'response' => $response
         ];
+
+        // return $response["data"]->id;
     }
 
     public function destroy($id)

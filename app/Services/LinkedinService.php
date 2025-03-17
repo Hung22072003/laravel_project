@@ -98,23 +98,22 @@ class LinkedinService {
             ->post("https://api.linkedin.com/v2/ugcPosts", $postPayload);
 
         $response = $postResponse->json();
-        // var_dump($response["id"]);
-        if($response["id"]){
-            $data = [
-                'id' => $response["id"],
-                'user_id'=> $user->getAuthIdentifier(),
-                'content' => $message,
-                'media_urls' => $images,
-                'scheduled_time' => null,
-                'list_platforms'=> ["LINKEDIN"]
-            ];   
+        // var_dump($response);
+        if(array_key_exists('id', $response)){
+            // $data = [
+            //     'postId' => $response["id"],
+            //     'user_id'=> $user->getAuthIdentifier(),
+            //     'content' => $message,
+            //     'media_urls' => $images,
+            //     'scheduled_time' => null,
+            //     'list_platforms'=> ["LINKEDIN"]
+            // ];   
 
-            $result = $this->postService->store($data);
+            // $this->postService->store($data);
 
-            if($result['success']) {
-                return $this->responseSuccessWithData($response);
-            } 
+            return $response["id"];
         }   
-        return $this->responseError($result["message"]);
+        
+        return null;
     }
 }

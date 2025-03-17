@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
+use App\Jobs\PublishPost;
+use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use App\Traits\APIResponse;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends ControllerWithGuard
 {
     use APIResponse;
 
     private $postService;
+    const LIST_PLATFORMS = 'list_platforms';
 
     public function __construct(PostService $postService)
     {
@@ -24,23 +28,47 @@ class PostController extends ControllerWithGuard
     {
         //
     }
+    public function publish(PostStoreRequest $request)
+    {
+        $data = [
+            'user_id' => $request->user()->id,
+            'content' => $request->content,
+            'media_urls' => $request->mediaUrls,
+            'scheduled_time' => $request->scheduledTime,
+            'list_platforms' => $request->listPlatforms
+        ];
+        
+        
+        $listId = [];
+        foreach ($data['list_platforms'] as $platform) {
+            $id = null;
+            var_dump(PublishPost::dispatch($data, $platform, $id));
+            // echo $id;
+            $listId[$platform] = $id;
+        }
+
+        $data['listId'] = $listId;
+
+        // $this->postService->store($data);
+        // PublishPost::dispatch($data);    
+        // var_dump($listId);
+
+        return $this->responseSuccess('Post created successfully!');
+    }
 
     public function store(PostStoreRequest $request)
     {
         $data = [
-            'user_id'=> $request->user()->id,
-            'content' => $request->content,
-            'media_urls' => $request->mediaUrls,
-            'scheduled_time' => $request->scheduledTime,
-            'list_platforms'=> $request->listPlatforms
+            Post::USER_ID=> $request->user()->id,
+            Post::CONTENT => $request->content,
+            Post::MEDIA_URLS => $request->mediaUrls,
+            Post::SCHEDULED_TIME => $request->scheduledTime,
+            self::LIST_PLATFORMS => $request->listPlatforms
         ];
 
-        $result = $this->postService->store($data);
+        $this->postService->store($data);
 
-        if ($result['success']) {
-            return $this->responseSuccess($result['message']);
-        }
-        return $this->responseError($result['message'], 500);
+        return $this->responseSuccess('Post created successfully!');
     }
 
     public function myPosts(Request $request)
@@ -70,20 +98,16 @@ class PostController extends ControllerWithGuard
         }
 
         $data = [
-            'user_id'=> $request->user()->id,
-            'content' => $request->content,
-            'media_urls' => $request->mediaUrls,
-            'scheduled_time' => $request->scheduledTime,
-            'list_platforms'=> $request->listPlatforms
+            Post::USER_ID=> $request->user()->id,
+            Post::CONTENT => $request->content,
+            Post::MEDIA_URLS => $request->mediaUrls,
+            Post::SCHEDULED_TIME => $request->scheduledTime,
+            self::LIST_PLATFORMS => $request->listPlatforms
         ];
 
-        $result = $this->postService->update($id, $data);
+         $this->postService->update($id, $data);
 
-        if ($result['success']) {
-            return $this->responseSuccess($result['message']);
-        }
-
-        return $this->responseError($result['message'], 500);
+        return $this->responseSuccess('Post updated successfully!');
     }
 
     /**

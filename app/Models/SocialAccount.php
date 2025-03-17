@@ -32,6 +32,10 @@ class SocialAccount extends Model
         self::EXPIRED_AT
     ];
 
+    protected $hidden = [
+        self::ACCESS_TOKEN_SECRET
+    ];
+
     protected $casts = [
         'deleted_at' => 'datetime',
     ];

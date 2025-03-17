@@ -12,17 +12,23 @@ class Post extends Model
     use HasFactory, HasUuids;
     use SoftDeletes;
 
+    const ID = "id";
     const USER_ID = "user_id";
     const CONTENT = "content";
     const MEDIA_URLS = "media_urls";
     const SCHEDULED_TIME = "scheduled_time";
+
+    public const STATUSES = [
+        'SUCCESS' => 'SUCCESS',
+        'FAILED' => 'FAILED',
+    ];
 
     protected $casts = [
         'deleted_at' => 'datetime',
         'media_urls' => 'array',
     ];
 
-    protected $fillale = [
+    protected $fillable = [
         self::USER_ID,
         self::CONTENT,
         self::MEDIA_URLS,

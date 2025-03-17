@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\LinkedinController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SocialAccountController;
 use App\Http\Controllers\TweetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LinkedinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,7 @@ Route::get('tweets-interactions/{id}', [TweetController::class, 'tweetInteractio
 
 # Posts 
 Route::resource('posts', PostController::class);
+Route::post('posts/publish', [PostController::class, 'publish']);
 Route::get('deleted-posts', [PostController::class, 'getDeletedPosts']);
 Route::put('deleted-posts/{id}', [PostController::class, 'restore']);
 

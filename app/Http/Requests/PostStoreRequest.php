@@ -18,11 +18,11 @@ class PostStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'scheduledTime' => 'required|date_format:Y-m-d H:i:s', // Must match format '2025-03-12 01:00:00'
+            'scheduledTime' => 'date_format:Y-m-d H:i:s', // Must match format '2025-03-12 01:00:00'
             'mediaUrls' => 'nullable|array',
             'mediaUrls.*' => 'url', // each item as a valid URL
             'listPlatforms' => 'required|array',
-            'listPlatforms.*' => 'in:TWITTER,FACEBOOK,REDDIT', // Each platform must be one of these
+            'listPlatforms.*' => 'in:TWITTER,FACEBOOK,REDDIT,LINKEDIN', // Each platform must be one of these
         ];
     }
 

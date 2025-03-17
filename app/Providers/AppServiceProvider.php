@@ -17,9 +17,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    
     public function register() {
-        ini_set('default_charset', 'UTF-8');
         $this->app->bind(UserRepositoryInterface::class, UserRepositoryImplementation::class);
         $this->app->bind(SocialAccountRepositoryInterface::class, SocialAccountRepositoryImplementation::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepositoryImplementation::class);

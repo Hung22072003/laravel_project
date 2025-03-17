@@ -90,6 +90,6 @@ class SocialAccountController extends ControllerWithGuard
             return $this->responseError('Social account not found', 404);
         }
         $this->socialAccountService->forceDelete($id);
-        return $this->responseSuccess('Social accoun permanently deleted!');
+        return $this->responseSuccess('Social account permanently deleted!');
     }
 }

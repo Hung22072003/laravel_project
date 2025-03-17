@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('post_id');
             $table->uuid('social_account_id');
-            $table->enum('platform', ['TWITTER', 'FACEBOOK', 'REDDIT', 'LINKEDIN'])->default('TWITTER');
+            $table->enum('platform', ['TWITTER', 'FACEBOOK', 'REDDIT'])->default('TWITTER');
             $table->enum('status', ['PENDING', 'FAILED', 'SUCCESS'])->default('PENDING');
             $table->timestamp('posted_at')->nullable();
             $table->timestamps();

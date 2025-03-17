@@ -16,6 +16,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Http;
+
 class AuthController extends Controller
 {
     use APIResponse;
@@ -210,10 +211,6 @@ class AuthController extends Controller
                 window.close(); 
             </script>";
         }
-        // return "<script>
-        //     window.location.href = 'http://localhost:3000/';
-        //     localStorage.setItem('accessToken', '$accessToken');
-        // </script>";
         return $this->responseError('User not authenticated', 401);
     }
 }

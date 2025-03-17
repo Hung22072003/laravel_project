@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Models\Post;
 use App\Jobs\PublishPost;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Bus;
 
 class SchedulePosts extends Command
 {
@@ -21,7 +22,7 @@ class SchedulePosts extends Command
     protected $description = 'Publish scheduled posts to platforms';
 
     /**
-     * Execute the console command.
+     * The post service instance.
      */
     protected $postService;
 
@@ -35,9 +36,10 @@ class SchedulePosts extends Command
     {
         $posts = $this->postService->getScheduledPosts();
 
-        foreach ($posts as $post) {
-            dispatch(new PublishPost($post));
-            $this->info("Post {$post->id} dispatched for publishing.");
-        }
+        Bus::batch(
+            collect($posts)->map(fn($post) => new PublishPost($post))->toArray()
+        )->dispatch();
+        
+        $this->info("Batch job dispatched for publishing " . count($posts) . " posts.");
     }
 }

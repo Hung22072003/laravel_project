@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Repositories\Post\PostRepositoryInterface;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as HTTPStatus;
 
 class PostService
 {
@@ -29,15 +31,24 @@ class PostService
         $postPlatforms = $this->postRepository->getPostPlatforms($post);
 
         foreach ($postPlatforms as $postPlatform) {
-            $socialAccount = $postPlatform->social_account;
+            $socialAccount = $postPlatform->socialAccount;
+            Log::info('socialAccount:', $socialAccount->toArray());
+            Log::info('Access Token: ' . $socialAccount->access_token);
+            Log::info('Access Token Secret: ' . $socialAccount->access_token_secret);
+
             $tweetService = new TweetService($socialAccount->access_token, $socialAccount->access_token_secret);
+            $mediaUrls = json_decode($post->media_urls, true);
+            $result = $tweetService->store($post->content,  $mediaUrls);
 
-            $result = $tweetService->store($post->content, $post->media_urls);
-
-            if ($result['httpCode'] == 200) {
-                $this->postRepository->updatePostPlatformStatus($postPlatform, 'SUCCESS');
+            if ($result['httpCode'] == HTTPStatus::HTTP_CREATED) {
+                $this->postRepository->updatePostPlatformStatus($postPlatform, Post::STATUSES['SUCCESS']);
+                Log::info('Publish posts successfully');
             } else {
-                $this->postRepository->updatePostPlatformStatus($postPlatform, 'FAILED');
+                $this->postRepository->updatePostPlatformStatus($postPlatform, Post::STATUSES['FAILED']);
+                Log::error('TweetService failed response:', [
+                    'httpCode' => $result['httpCode'],
+                    'response' => json_encode($result['response'], JSON_PRETTY_PRINT)
+                ]);
             }
         }
     }

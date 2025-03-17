@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
-            $table->text('content');
+            $table->text('content')->unique();
             $table->json('media_urls')->nullable();
             $table->timestamp('scheduled_time')->nullable();
             $table->timestamps();

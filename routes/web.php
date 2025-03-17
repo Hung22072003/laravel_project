@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use L5Swagger\Http\Controllers\SwaggerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocialAuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,4 +35,3 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/login/linkedin', [AuthController::class, 'redirectToLinkedin'])->name('login.linkedin');
 Route::get('/login/linkedin/callback', [AuthController::class, 'handleLinkedinCallback'])->name('login.linkedin.callback');
-
