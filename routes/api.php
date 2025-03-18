@@ -35,7 +35,6 @@ Route::get('tweets-interactions/{id}', [TweetController::class, 'tweetInteractio
 
 # Posts 
 Route::resource('posts', PostController::class);
-Route::post('posts/publish', [PostController::class, 'publish']);
 Route::get('deleted-posts', [PostController::class, 'getDeletedPosts']);
 Route::put('deleted-posts/{id}', [PostController::class, 'restore']);
 

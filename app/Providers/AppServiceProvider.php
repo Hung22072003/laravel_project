@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Repositories\Interaction\InteractionRepositoryImplementation;
+use App\Repositories\Interaction\InteractionRepositoryInterface;
 use App\Repositories\Post\PostRepositoryImplementation;
 use App\Repositories\Post\PostRepositoryInterface;
 use App\Repositories\SocialAccount\SocialAccountRepositoryImplementation;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepositoryImplementation::class);
         $this->app->bind(SocialAccountRepositoryInterface::class, SocialAccountRepositoryImplementation::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepositoryImplementation::class);
+        $this->app->bind(InteractionRepositoryInterface::class, InteractionRepositoryImplementation::class);
     }
 
     /**

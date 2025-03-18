@@ -17,6 +17,10 @@ class PostRepositoryImplementation implements PostRepositoryInterface
         //
     }
 
+    public function getAllPostPlatforms() {
+        return PostPlatform::where('status', 'SUCCESS')->get();
+    }
+
     public function getScheduledPosts()
     {
         $posts = Post::where('scheduled_time', '<=', Carbon::now())
@@ -32,9 +36,10 @@ class PostRepositoryImplementation implements PostRepositoryInterface
         return PostPlatform::where('post_id', $post->id)->with('socialAccount')->get();
     }
 
-    public function updatePostPlatformStatus($postPlatform, $status)
+    public function updatePostPlatform($postPlatform, $status, $postPlatformId = null)
     {
         $postPlatform->update([
+            'post_platform_id' => $postPlatformId,
             'status' => $status,
             'posted_at' => Carbon::now(),
         ]);
@@ -51,51 +56,6 @@ class PostRepositoryImplementation implements PostRepositoryInterface
         return $posts;
     }
 
-    // public function create(array $data)
-    // {
-    //     $userId = $data["user_id"];
-    //     $content = $data["content"];
-    //     $mediaUrls = $data["media_urls"];
-    //     $scheduledTime = $data["scheduled_time"];
-    //     $listPlatforms = $data["list_platforms"];
-    //     $listId = $data["listId"];
-    //     DB::transaction(function () use ($userId, $content, $mediaUrls, $scheduledTime, $listPlatforms,  $listId) {
-    //         $post = Post::create([
-    //             Post::ID =>  Str::uuid(),
-    //             Post::USER_ID => $userId,
-    //             Post::CONTENT => $content,
-    //             Post::MEDIA_URLS => json_encode($mediaUrls),
-    //             Post::SCHEDULED_TIME => $scheduledTime
-    //         ]);
-        
-    //         $postPlatformsData = [];
-    //         foreach ($listPlatforms as $platform) {
-    //             $socialAccount = SocialAccount::where('user_id', $userId)
-    //                 ->where('platform', $platform)
-    //                 ->first();
-        
-    //             if ($socialAccount) {
-    //                 if($listId[$platform] != null) {
-    //                     $postPlatformsData[] = [
-    //                         PostPlatform::ID => $listId[$platform],
-    //                         PostPlatform::POST_ID => $post->id,
-    //                         PostPlatform::PLATFORM => $platform,
-    //                         PostPlatform::SOCIAL_ACCOUNT_ID => $socialAccount->id,
-    //                         PostPlatform::CREATED_AT => now(),
-    //                         PostPlatform::STATUS => $scheduledTime ? 'PENDING' : 'SUCCESS'
-    //                     ];
-    //                 }
-    //             }
-    //         }
-
-    //         if (!empty($postPlatformsData)) {
-    //             PostPlatform::insert($postPlatformsData);
-    //         }
-    //     });
-
-    //     return;
-    // }
-
     public function create(array $data)
     {
         $userId = $data["user_id"];
@@ -109,7 +69,7 @@ class PostRepositoryImplementation implements PostRepositoryInterface
                 Post::ID => Str::uuid(),
                 Post::USER_ID => $userId,
                 Post::CONTENT => $content,
-                Post::MEDIA_URLS => json_encode($mediaUrls),
+                Post::MEDIA_URLS => $mediaUrls,
                 Post::SCHEDULED_TIME => $scheduledTime
             ]);
         
@@ -137,6 +97,7 @@ class PostRepositoryImplementation implements PostRepositoryInterface
 
         return;
     }
+
     public function getById($id)
     {
         $post = Post::find($id);
@@ -160,7 +121,7 @@ class PostRepositoryImplementation implements PostRepositoryInterface
             $post->update([
                 Post::USER_ID => $userId,
                 Post::CONTENT => $content,
-                Post::MEDIA_URLS => json_encode($mediaUrls),
+                Post::MEDIA_URLS => $mediaUrls,
                 Post::SCHEDULED_TIME => $scheduledTime
             ]);
         

@@ -13,6 +13,7 @@ class PostPlatform extends Model
 
     const ID = 'id';
     const POST_ID = 'post_id';
+    const POST_PLATFORM_ID = 'post_platform_id';
     const SOCIAL_ACCOUNT_ID = 'social_account_id';
     const PLATFORM = 'platform';
     const STATUS = 'status';
@@ -21,6 +22,7 @@ class PostPlatform extends Model
 
     protected $fillable = [
         self::POST_ID,
+        self::POST_PLATFORM_ID,
         self::SOCIAL_ACCOUNT_ID,
         self::PLATFORM,
         self::STATUS,

@@ -162,13 +162,14 @@ return [
          * Package Service Providers...
          */
 
-        /*
+        /*  
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class, 
         \L5Swagger\L5SwaggerServiceProvider::class,
     ])->toArray(),
@@ -186,7 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
-        // 'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
         // 'AWS' => Aws\Laravel\AwsFacade::class,
         // 'L5Swagger' => \L5Swagger\Facades\L5Swagger::class,
     ])->toArray(),

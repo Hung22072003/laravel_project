@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->string('social_user_id', 50)->nullable();
             $table->string('screen_name', 50)->nullable();
-            $table->enum('platform', ['TWITTER', 'FACEBOOK', 'REDDIT'])->default('TWITTER');
+            $table->enum('platform', ['TWITTER', 'FACEBOOK', 'REDDIT', 'LINKEDIN'])->default('TWITTER');
             $table->text('access_token');
             $table->text('access_token_secret')->nullable();
             $table->text('refresh_token')->nullable();

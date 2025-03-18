@@ -20,7 +20,7 @@ class PostStoreRequest extends FormRequest
         return [
             'scheduledTime' => 'date_format:Y-m-d H:i:s', // Must match format '2025-03-12 01:00:00'
             'mediaUrls' => 'nullable|array',
-            'mediaUrls.*' => 'url', // each item as a valid URL
+            'mediaUrls.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'listPlatforms' => 'required|array',
             'listPlatforms.*' => 'in:TWITTER,FACEBOOK,REDDIT,LINKEDIN', // Each platform must be one of these
         ];
