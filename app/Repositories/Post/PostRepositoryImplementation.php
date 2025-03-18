@@ -51,6 +51,51 @@ class PostRepositoryImplementation implements PostRepositoryInterface
         return $posts;
     }
 
+    // public function create(array $data)
+    // {
+    //     $userId = $data["user_id"];
+    //     $content = $data["content"];
+    //     $mediaUrls = $data["media_urls"];
+    //     $scheduledTime = $data["scheduled_time"];
+    //     $listPlatforms = $data["list_platforms"];
+    //     $listId = $data["listId"];
+    //     DB::transaction(function () use ($userId, $content, $mediaUrls, $scheduledTime, $listPlatforms,  $listId) {
+    //         $post = Post::create([
+    //             Post::ID =>  Str::uuid(),
+    //             Post::USER_ID => $userId,
+    //             Post::CONTENT => $content,
+    //             Post::MEDIA_URLS => json_encode($mediaUrls),
+    //             Post::SCHEDULED_TIME => $scheduledTime
+    //         ]);
+        
+    //         $postPlatformsData = [];
+    //         foreach ($listPlatforms as $platform) {
+    //             $socialAccount = SocialAccount::where('user_id', $userId)
+    //                 ->where('platform', $platform)
+    //                 ->first();
+        
+    //             if ($socialAccount) {
+    //                 if($listId[$platform] != null) {
+    //                     $postPlatformsData[] = [
+    //                         PostPlatform::ID => $listId[$platform],
+    //                         PostPlatform::POST_ID => $post->id,
+    //                         PostPlatform::PLATFORM => $platform,
+    //                         PostPlatform::SOCIAL_ACCOUNT_ID => $socialAccount->id,
+    //                         PostPlatform::CREATED_AT => now(),
+    //                         PostPlatform::STATUS => $scheduledTime ? 'PENDING' : 'SUCCESS'
+    //                     ];
+    //                 }
+    //             }
+    //         }
+
+    //         if (!empty($postPlatformsData)) {
+    //             PostPlatform::insert($postPlatformsData);
+    //         }
+    //     });
+
+    //     return;
+    // }
+
     public function create(array $data)
     {
         $userId = $data["user_id"];
@@ -58,10 +103,10 @@ class PostRepositoryImplementation implements PostRepositoryInterface
         $mediaUrls = $data["media_urls"];
         $scheduledTime = $data["scheduled_time"];
         $listPlatforms = $data["list_platforms"];
-        $listId = $data["listId"];
-        DB::transaction(function () use ($userId, $content, $mediaUrls, $scheduledTime, $listPlatforms,  $listId) {
+
+        DB::transaction(function () use ($userId, $content, $mediaUrls, $scheduledTime, $listPlatforms) {
             $post = Post::create([
-                Post::ID =>  Str::uuid(),
+                Post::ID => Str::uuid(),
                 Post::USER_ID => $userId,
                 Post::CONTENT => $content,
                 Post::MEDIA_URLS => json_encode($mediaUrls),
@@ -75,16 +120,13 @@ class PostRepositoryImplementation implements PostRepositoryInterface
                     ->first();
         
                 if ($socialAccount) {
-                    if($listId[$platform] != null) {
-                        $postPlatformsData[] = [
-                            PostPlatform::ID => $listId[$platform],
-                            PostPlatform::POST_ID => $post->id,
-                            PostPlatform::PLATFORM => $platform,
-                            PostPlatform::SOCIAL_ACCOUNT_ID => $socialAccount->id,
-                            PostPlatform::CREATED_AT => now(),
-                            PostPlatform::STATUS => $scheduledTime ? 'PENDING' : 'SUCCESS'
-                        ];
-                    }
+                    $postPlatformsData[] = [
+                        PostPlatform::ID => Str::uuid(),
+                        PostPlatform::POST_ID => $post->id,
+                        PostPlatform::PLATFORM => $platform,
+                        PostPlatform::SOCIAL_ACCOUNT_ID => $socialAccount->id,
+                        PostPlatform::CREATED_AT => now()
+                    ];
                 }
             }
 
@@ -95,7 +137,6 @@ class PostRepositoryImplementation implements PostRepositoryInterface
 
         return;
     }
-
     public function getById($id)
     {
         $post = Post::find($id);

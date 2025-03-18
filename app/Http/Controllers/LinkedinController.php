@@ -16,6 +16,6 @@ class LinkedinController extends ControllerWithGuard
 
     public function postToLinkedIn(LinkedinPostRequest $request)
     {
-        return $this->linkedinService->postToLinkedin($request->message ? $request->message : "", $request->images ? $request->images : []);
+        // return $this->linkedinService->postToLinkedin($request->message ? $request->message : "", $request->images ? $request->images : []);
     }
 }

@@ -20,7 +20,7 @@ class TweetService
         $mediaIds = [];
 
         foreach ($mediaPaths as $path) {
-            $uploadedMedia = $this->client->upload("media/upload", ["media" => $path->getRealPath()]);
+            $uploadedMedia = $this->client->upload("media/upload", ["media" => $path]);
             if (isset($uploadedMedia->media_id_string)) {
                 $mediaIds[] = $uploadedMedia->media_id_string;
             }
@@ -40,7 +40,7 @@ class TweetService
 
         $response = $this->client->post("tweets", $parameters);
 
-        var_dump( $response);
+        var_dump($response);
         return [
             'httpCode' => $this->client->getLastHttpCode(),
             'response' => $response

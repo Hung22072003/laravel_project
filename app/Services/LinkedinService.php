@@ -10,10 +10,11 @@ class LinkedinService {
     private $socialAccountService;
     private $postService;
     use APIResponse;
-    public function __construct(SocialAccountService $socialAccountService, PostService $postService)
+    
+    public function __construct()
     {
-        $this->socialAccountService = $socialAccountService;
-        $this->postService = $postService;
+        // $this->socialAccountService = $socialAccountService;
+        // $this->postService = $postService;
     }
     public function uploadMedias(string $userId, string $accessToken, array $images) {
         $assetIds = [];
@@ -49,7 +50,7 @@ class LinkedinService {
                     Http::withHeaders([
                         'Authorization' => "Bearer $accessToken",
                         'Content-Type' => 'application/octet-stream',
-                    ])->withBody(file_get_contents($image->getPathname()), 'application/octet-stream')
+                    ])->withBody(file_get_contents($image), 'application/octet-stream')
                     ->put($uploadUrl);
                 }
             
@@ -65,12 +66,12 @@ class LinkedinService {
         return $assetIds;
     }
 
-    public function postToLinkedin(string $message, array $images) {
-        $user = auth()->user();
-        $account = $this->socialAccountService->showByUserPlatform($user->getAuthIdentifier(), "LINKEDIN");
+    public function postToLinkedin(string $message, array $images, $accessToken) {
+        // $user = auth()->user();
+        // $account = $this->socialAccountService->showByUserPlatform($user->getAuthIdentifier(), "LINKEDIN");
 
-        if(!$account) return $this->responseError('No account with linkedin', 400);
-        $accessToken = $account["access_token"];
+        // if(!$account) return $this->responseError('No account with linkedin', 400);
+        // $accessToken = $account["access_token"];
         
         $userResponse = Http::withToken($accessToken)->get('https://api.linkedin.com/v2/userinfo');
         $userId = $userResponse->json()['sub'];
@@ -97,23 +98,28 @@ class LinkedinService {
             ->withHeaders(['Content-Type' => 'application/json'])
             ->post("https://api.linkedin.com/v2/ugcPosts", $postPayload);
 
-        $response = $postResponse->json();
-        // var_dump($response);
-        if(array_key_exists('id', $response)){
-            // $data = [
-            //     'postId' => $response["id"],
-            //     'user_id'=> $user->getAuthIdentifier(),
-            //     'content' => $message,
-            //     'media_urls' => $images,
-            //     'scheduled_time' => null,
-            //     'list_platforms'=> ["LINKEDIN"]
-            // ];   
 
-            // $this->postService->store($data);
+            return [
+                'httpCode' => $postResponse->getStatusCode(),
+                'response' => $postResponse->json()
+            ];
+        // $response = $postResponse->json();
+        // // var_dump($response);
+        // if(array_key_exists('id', $response)){
+        //     // $data = [
+        //     //     'postId' => $response["id"],
+        //     //     'user_id'=> $user->getAuthIdentifier(),
+        //     //     'content' => $message,
+        //     //     'media_urls' => $images,
+        //     //     'scheduled_time' => null,
+        //     //     'list_platforms'=> ["LINKEDIN"]
+        //     // ];   
 
-            return $response["id"];
-        }   
+        //     // $this->postService->store($data);
+
+        //     return $response["id"];
+        // }   
         
-        return null;
+        // return null;
     }
 }

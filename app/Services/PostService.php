@@ -36,9 +36,14 @@ class PostService
             Log::info('Access Token: ' . $socialAccount->access_token);
             Log::info('Access Token Secret: ' . $socialAccount->access_token_secret);
 
-            $tweetService = new TweetService($socialAccount->access_token, $socialAccount->access_token_secret);
-            $mediaUrls = json_decode($post->media_urls, true);
-            $result = $tweetService->store($post->content,  $mediaUrls);
+            // $tweetService = new TweetService($socialAccount->access_token, $socialAccount->access_token_secret);
+            // $mediaUrls = json_decode($post->media_urls, true);
+            // $result = $tweetService->store($post->content,  $mediaUrls);
+            if($socialAccount->platform == "LINKEDIN") {
+                $linkedinService = new LinkedinService();
+                $mediaUrls = json_decode($post->media_urls, true);
+                $result = $linkedinService->postToLinkedin($post->content, $mediaUrls, $socialAccount->access_token);
+            }
 
             if ($result['httpCode'] == HTTPStatus::HTTP_CREATED) {
                 $this->postRepository->updatePostPlatformStatus($postPlatform, Post::STATUSES['SUCCESS']);
