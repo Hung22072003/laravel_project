@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Illuminate\Support\Facades\Log;
 
 class TweetService
 {
@@ -42,6 +43,11 @@ class TweetService
 
         // $res = json_encode($response, JSON_PRETTY_PRINT);
         // var_dump($response);
+        Log::info('Publish response:', [
+            'httpCode' => $this->client->getLastHttpCode(),
+            // 'response' => $response->data->id
+        ]);
+
         if ($this->client->getLastHttpCode() == 201) {
             return [
                 'httpCode' => $this->client->getLastHttpCode(),
@@ -101,11 +107,17 @@ class TweetService
             'query' => "conversation_id:{$tweetId}"
         ]);
 
+        // var_dump($likes["title"]);
+
+        Log::info('Get interaction response:', [
+            'httpCode' => $this->client->getLastHttpCode(),
+            // 'response' => $response->data->id
+        ]);
         if ($this->client->getLastHttpCode() == 200) {
             return [
-                "likes" => $likes["meta"]["result_count"],
-                "shares" => $retweets["meta"]["result_count"],
-                "comments" => $replies["meta"]["result_count"]
+                "likes" => $likes->meta->result_count,
+                "shares" => $retweets->meta->result_count,
+                "comments" => $replies->meta->result_count
             ];
         } else {
             return null;

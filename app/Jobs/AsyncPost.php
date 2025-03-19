@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as HTTPStatus;
 
@@ -54,7 +55,7 @@ class AsyncPost implements ShouldQueue
                 }
                 break;
         }
-
+        
         if ($result['httpCode'] == HTTPStatus::HTTP_CREATED) {
             PostPlatform::insert([
                 PostPlatform::ID => Str::uuid(),

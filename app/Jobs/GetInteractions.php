@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\PostPlatform;
 use App\Services\InteractionService;
+use App\Services\SocialAccountService;
 use App\Services\TweetService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -28,13 +29,15 @@ class GetInteractions implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(TweetService $tweetService, InteractionService $interactionService)
+    public function handle(SocialAccountService $socialAccountService, InteractionService $interactionService)
     {    
         $result = null;
+        $socialAccount = $socialAccountService->show($this->postPlatform["social_account_id"]);
         switch($this->postPlatform["platform"]) {
             case "TWITTER": {
+                $tweetService = new TweetService($socialAccount->access_token, $socialAccount->access_token_secret);
                 $result = $tweetService->tweetInteractions($this->postPlatform["post_platform_id"]);
-                Log::info('result', $result);
+                Log::info('result'. $result);
             }
         }
 

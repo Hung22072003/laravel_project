@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Jobs\PublishPost;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleInteractions extends Command
 {
@@ -37,10 +38,11 @@ class ScheduleInteractions extends Command
     {
         $postPlatforms = $this->postService->getAllPostPlatforms();
 
-        Bus::batch(
-            collect($postPlatforms)->map(fn($postPlatform) => new GetInteractions($postPlatform))->toArray()
-        )->dispatch();
+        // Log::info('list_platform', $postPlatforms->toArray());
+        // Bus::batch(
+        //     collect($postPlatforms)->map(fn($postPlatform) => new GetInteractions($postPlatform))->toArray()
+        // )->dispatch();
         
-        $this->info("Batch job dispatched for publishing " . count($postPlatforms) . " posts.");
+        // $this->info("Batch job dispatched for publishing " . count($postPlatforms) . " posts.");
     }
 }

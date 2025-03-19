@@ -52,6 +52,6 @@ class TweetController extends ControllerWithGuard
         $account = SocialAccount::where("user_id", $request->user()->id)->where("platform", "TWITTER")->first();
         $tweetService = new TweetService($account->access_token, $account->access_token_secret);
         $result = $tweetService->tweetInteractions($id);
-        return response()->json($result['response'], $result['httpCode']);
+        return response()->json($result);
     }
 }

@@ -62,7 +62,7 @@ class PostService
                 Log::info('Publish posts successfully');
             } else {
                 $this->postRepository->updatePostPlatform($postPlatform, Post::STATUSES['FAILED'], null);
-                Log::error('TweetService failed response:', [
+                Log::error('Publish failed response:', [
                     'httpCode' => $result['httpCode'],
                     'response' => json_encode($result['response'], JSON_PRETTY_PRINT)
                 ]);
