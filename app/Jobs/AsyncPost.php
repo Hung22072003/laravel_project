@@ -56,7 +56,6 @@ class AsyncPost implements ShouldQueue
                 break;
         }
         
-        if ($result['httpCode'] == HTTPStatus::HTTP_CREATED) {
             PostPlatform::insert([
                 PostPlatform::ID => Str::uuid(),
                 PostPlatform::POST_PLATFORM_ID => $result['response'],
@@ -65,8 +64,7 @@ class AsyncPost implements ShouldQueue
                 PostPlatform::SOCIAL_ACCOUNT_ID => $socialAccount->id,
                 PostPlatform::CREATED_AT => now(),
                 PostPlatform::POST_AT => now(),
-                PostPlatform::STATUS => $result['response'] ? 'SUCCESS' : 'FAILED'
+                PostPlatform::STATUS => $result['httpCode'] == HTTPStatus::HTTP_CREATED ? 'SUCCESS' : 'FAILED'
             ]);
-        }
     }
 }

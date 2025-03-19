@@ -38,11 +38,11 @@ class ScheduleInteractions extends Command
     {
         $postPlatforms = $this->postService->getAllPostPlatforms();
 
-        // Log::info('list_platform', $postPlatforms->toArray());
-        // Bus::batch(
-        //     collect($postPlatforms)->map(fn($postPlatform) => new GetInteractions($postPlatform))->toArray()
-        // )->dispatch();
+        Log::info('list_platform', $postPlatforms->toArray());
+        Bus::batch(
+            collect($postPlatforms)->map(fn($postPlatform) => new GetInteractions($postPlatform))->toArray()
+        )->dispatch();
         
-        // $this->info("Batch job dispatched for publishing " . count($postPlatforms) . " posts.");
+        $this->info("Batch job dispatched for publishing " . count($postPlatforms) . " posts.");
     }
 }

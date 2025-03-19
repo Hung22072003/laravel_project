@@ -37,12 +37,13 @@ class GetInteractions implements ShouldQueue
             case "TWITTER": {
                 $tweetService = new TweetService($socialAccount->access_token, $socialAccount->access_token_secret);
                 $result = $tweetService->tweetInteractions($this->postPlatform["post_platform_id"]);
-                Log::info('result'. $result);
+                // Log::info('result'. $result);
             }
         }
 
         if($result != null) {
-            $interactionService->createOrUpdateInteraction($this->postPlatform["post_platform_id"], $result);
+            Log::info('Vào được đây rồi');
+            $interactionService->createOrUpdateInteraction($this->postPlatform["id"], $result);
         }
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('number_of_shares');
             $table->integer('number_of_comments');
             $table->date('day');
-            
+            $table->timestamps();
             $table->softDeletes();
             
             $table->foreign('post_platform_id')->references('id')->on('post_platforms')->onDelete('cascade');
